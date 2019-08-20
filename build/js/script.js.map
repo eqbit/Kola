@@ -1,0 +1,1 @@
+{"version":3,"sources":["script.js"],"names":["test","d"],"mappings":";;AAAA,IAAIA,IAAI,GAAG,SAAPA,IAAO,CAAAC,CAAC;AAAA,SAAM,MAAN;AAAA,CAAZ","file":"script.js","sourcesContent":["let test = d => ( 'test');"]}

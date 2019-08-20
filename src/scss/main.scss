@@ -1,0 +1,64 @@
+@import "./fonts";
+@import "./mixins";
+
+html, body {
+  height: 100%;
+}
+
+*, *:after, *:before {
+  box-sizing: border-box;
+}
+
+body {
+  background: #5E666E;
+  font-family: "TRY Vesterbro";
+  font-size: 16px;
+  font-weight: 400;
+  color: #FFF;
+  margin: 0;
+}
+
+.container {
+  width: 1241px;
+  max-width: 100%;
+  padding-left: 35px;
+  padding-right: 35px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 121px;
+}
+
+.header-menu {
+  display: flex;
+
+  &__item {
+    margin: 0 20px;
+    font-weight: bold;
+    color: #FFF;
+    text-decoration: none;
+    transition: .5s;
+
+    &:hover {
+      opacity: .4;
+    }
+  }
+}
