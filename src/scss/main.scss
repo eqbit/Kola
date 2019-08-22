@@ -15,6 +15,7 @@ html, body {
 
 *, *:after, *:before {
   box-sizing: border-box;
+  outline: none;
 }
 
 body {
@@ -200,4 +201,33 @@ main {
   height: 100vh !important;
   position: relative;
   border: none !important;
+}
+
+ul.slick-dots {
+  list-style: none;
+
+  li {
+    margin: 0;
+    padding: 0;
+
+    button {
+      font-size: 0;
+      border: none;
+      width: 2px;
+      height: 10px;
+      transition: .3s;
+      padding: 0;
+      cursor: pointer;
+      border-radius: 2px;
+      margin: 5px 0;
+      opacity: .5;
+    }
+
+    &.slick-active {
+      button {
+        height: 30px;
+        opacity: 1;
+      }
+    }
+  }
 }
