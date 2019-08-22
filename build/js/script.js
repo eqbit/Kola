@@ -1,12 +1,15 @@
 "use strict";
 
 $(function () {
+  $('body').addClass('document-loaded');
   var state = {
-    delta: 0
+    letScroll: true
   };
   var $pageSlider = $('[data-main-slider]');
   $pageSlider.on('init', function () {
     mouseWheel($pageSlider);
+  }).on('afterChange', function () {
+    state.letScroll = true;
   }).slick({
     vertical: true,
     dots: true,
@@ -27,19 +30,24 @@ $(function () {
 
   function mouseWheelHandler(event) {
     var $slider = event.data.$slider;
-    state.delta += event.originalEvent.deltaY;
 
-    if (state.delta > 100) {
-      $slider.slick('slickNext');
-      state.delta = 0;
+    if (event.originalEvent.deltaY > 0) {
+      changePageSlide('down', $slider);
+    } else {
+      changePageSlide('up', $slider);
     }
+  }
 
-    if (state.delta < -100) {
+  function changePageSlide(direction, $slider) {
+    if (!state.letScroll) return;
+
+    if (direction === 'up') {
       $slider.slick('slickPrev');
-      state.delta = 0;
+    } else {
+      $slider.slick('slickNext');
     }
 
-    console.log(state.delta);
+    state.letScroll = false;
   }
 });
 //# sourceMappingURL=script.js.map

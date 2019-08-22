@@ -40,3 +40,9 @@
     @content;
   }
 }
+
+@mixin mqh($height, $type: max) {
+  @media only screen and (#{$type}-height: $height) {
+    @content;
+  }
+}

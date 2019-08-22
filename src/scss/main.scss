@@ -38,11 +38,16 @@ header {
 
 main {
   height: 100%;
-  overflow: hidden;
+}
+
+.document-loaded {
+  main {
+    overflow: hidden;
+  }
 }
 
 .container {
-  width: 1510px;
+  width: 1440px;
   max-width: 100%;
   padding-left: 35px;
   padding-right: 35px;
@@ -50,7 +55,12 @@ main {
   margin-right: auto;
   overflow: hidden;
 
+  @include mq(1441px, min) {
+    padding: 0 100px;
+  }
+
   @include mq(1439px) {
+    width: 1510px;
     padding-left: 60px;
     padding-right: 60px;
   }
@@ -93,7 +103,6 @@ main {
   height: 100%;
 
   &-slide {
-    position: absolute;
     width: 100%;
     height: 100%;
     left: 0;
@@ -109,10 +118,16 @@ main {
   }
 }
 
+.document-loaded {
+  .pages-slide {
+    position: absolute;
+  }
+}
+
 .main-screen {
   position: relative;
   max-height: 100%;
-  height: 865px;
+  height: 100%;
   width: 100%;
 
   &__bg {
@@ -124,6 +139,17 @@ main {
     z-index: -1;
 
     @extend %img-fit;
+
+    @include mq(1441px, min) {
+      @include mqh(1000px, min) {
+        width: 1440px;
+        height: 864px;
+        max-height: calc(100vh - 246px);
+        left: calc(50% - 720px);
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
   }
 
   &__title {
@@ -177,12 +203,33 @@ main {
       font-weight: 300;
     }
   }
+
+  &__next {
+    position: absolute;
+    bottom: 30px;
+    left: calc(50% - 27px);
+    cursor: pointer;
+
+    svg {
+      path {
+        transition: .1s;
+      }
+    }
+
+    &:hover {
+      svg {
+        path {
+          opacity: 1;
+        }
+      }
+    }
+  }
 }
 
 .location {
   position: relative;
   max-height: 100%;
-  height: 865px;
+  height: 100%;
   width: 100%;
 
   &__bg {
@@ -194,6 +241,34 @@ main {
     z-index: -1;
 
     @extend %img-fit;
+
+    @include mq(1441px, min) {
+      @include mqh(1000px, min) {
+        width: 1440px;
+        height: 864px;
+        max-height: calc(100vh - 246px);
+        left: calc(50% - 720px);
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+  &-info {
+    &-container {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 143px;
+    }
+
+    width: 430px;
+    max-width: 100%;
+
+    &__title {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 30px 0;
+    }
   }
 }
 
