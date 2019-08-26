@@ -80,21 +80,21 @@ $(function () {
   const isWideScreen = function () {
     return $(window).width() > 1440;
   };
-  
+
   
   const $commonSliders = $('[data-gallery-slider]');
-  
+
   $commonSliders.each(function () {
     const $slider = $(this);
-    
+
     $slider
       .on('init reInit afterChange', (event, slick, currentSlide) => {
         currentSlide = (currentSlide ? currentSlide : 0) + 1;
         $slider.parent().find('[data-gallery-slider-number]').html(`${currentSlide} <span style="opacity: .5">/ ${slick.slideCount}</span>`);
-        
+
         const $slides = slick.$slides,
           title = $slides.eq(currentSlide - 1).find('[data-caption').data('caption');
-        
+
         $slider.parent().find('[data-gallery-slider-title]').text(title);
       })
       .slick({
@@ -103,6 +103,34 @@ $(function () {
         slidesToShow: 1,
         prevArrow: $slider.parent().find('[data-gallery-slider-prev]'),
         nextArrow: $slider.parent().find('[data-gallery-slider-next]'),
+        fade: true,
+        speed: 100
       });
   });
+
+  $('[data-team-slider]').slick({
+    slidesToShow: 4,
+    infinite: false,
+    prevArrow: $('[data-team-slider-prev]'),
+    nextArrow: $('[data-team-slider-next]')
+  });
+
+  const $clubGallery = $('[data-club-tab-gallery]'),
+      $clubContent = $('[data-club-tab-content]'),
+      $clubHead = $('[data-club-tab-head]');
+
+  $clubGallery.hide().eq(0).show();
+  $clubContent.hide().eq(0).show();
+  $clubHead.eq(0).addClass('active');
+
+  $clubHead.on('click', function () {
+    const $this = $(this);
+
+    $clubHead.removeClass('active');
+    $this.addClass('active');
+
+    $clubContent.hide().eq($this.index()).fadeIn();
+    $clubGallery.hide().eq($this.index()).fadeIn()
+        .find('[data-gallery-slider]').slick('setPosition');
+  })
 });
