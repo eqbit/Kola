@@ -133,4 +133,28 @@ $(function () {
     $clubGallery.hide().eq($this.index()).fadeIn()
         .find('[data-gallery-slider]').slick('setPosition');
   })
+  
+  $('[data-club-view-slider]').on('click', function () {
+    if(!$(this).is('.active')) {
+      const $tab = $(this).closest('[data-club-tab-gallery]')
+      $tab.find('[data-gallery-plan]').hide();
+      $tab.find('[data-club-view-plan]').removeClass('active');
+      $(this).addClass('active');
+      $tab.find('[data-gallery-slider]').fadeIn().slick('setPosition');
+      $tab.find('[data-gallery-info]').fadeIn();
+    }
+  });
+  
+  $('[data-club-view-plan]').on('click', function () {
+    if(!$(this).is('.active')) {
+      const $tab = $(this).closest('[data-club-tab-gallery]')
+      $tab.find('[data-gallery-slider]').hide();
+      $tab.find('[data-club-view-slider]').removeClass('active');
+      $tab.find('[data-gallery-info]').hide();
+      $(this).addClass('active');
+      $tab.find('[data-gallery-plan]').fadeIn();
+    }
+  });
+  
+  $('[data-custom-select]').select2();
 });

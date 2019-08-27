@@ -90,8 +90,50 @@ $(function () {
       infinite: false,
       slidesToShow: 1,
       prevArrow: $slider.parent().find('[data-gallery-slider-prev]'),
-      nextArrow: $slider.parent().find('[data-gallery-slider-next]')
+      nextArrow: $slider.parent().find('[data-gallery-slider-next]'),
+      fade: true,
+      speed: 100
     });
   });
+  $('[data-team-slider]').slick({
+    slidesToShow: 4,
+    infinite: false,
+    prevArrow: $('[data-team-slider-prev]'),
+    nextArrow: $('[data-team-slider-next]')
+  });
+  var $clubGallery = $('[data-club-tab-gallery]'),
+      $clubContent = $('[data-club-tab-content]'),
+      $clubHead = $('[data-club-tab-head]');
+  $clubGallery.hide().eq(0).show();
+  $clubContent.hide().eq(0).show();
+  $clubHead.eq(0).addClass('active');
+  $clubHead.on('click', function () {
+    var $this = $(this);
+    $clubHead.removeClass('active');
+    $this.addClass('active');
+    $clubContent.hide().eq($this.index()).fadeIn();
+    $clubGallery.hide().eq($this.index()).fadeIn().find('[data-gallery-slider]').slick('setPosition');
+  });
+  $('[data-club-view-slider]').on('click', function () {
+    if (!$(this).is('.active')) {
+      var $tab = $(this).closest('[data-club-tab-gallery]');
+      $tab.find('[data-gallery-plan]').hide();
+      $tab.find('[data-club-view-plan]').removeClass('active');
+      $(this).addClass('active');
+      $tab.find('[data-gallery-slider]').fadeIn().slick('setPosition');
+      $tab.find('[data-gallery-info]').fadeIn();
+    }
+  });
+  $('[data-club-view-plan]').on('click', function () {
+    if (!$(this).is('.active')) {
+      var $tab = $(this).closest('[data-club-tab-gallery]');
+      $tab.find('[data-gallery-slider]').hide();
+      $tab.find('[data-club-view-slider]').removeClass('active');
+      $tab.find('[data-gallery-info]').hide();
+      $(this).addClass('active');
+      $tab.find('[data-gallery-plan]').fadeIn();
+    }
+  });
+  $('[data-custom-select]').select2();
 });
 //# sourceMappingURL=script.js.map
