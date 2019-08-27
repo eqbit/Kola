@@ -574,19 +574,20 @@
                                 </div>
 
                                 <div class="input-container">
-                                    <select name="residence" id="form-role" data-custom-select>
+                                    <select name="residence" id="form-role" data-custom-select-no-search>
                                         <option value=""></option>
                                         <option value="Fly Fisher">Fly Fisher</option>
                                         <option value="Outfitter">Outfitter</option>
                                         <option value="Media">Media</option>
                                         <option value="Job Seeker">Job Seeker</option>
                                     </select>
-                                    <label for="form-role">Residence <span>*</span></label>
+                                    <label for="form-role">Your role<span>*</span></label>
                                 </div>
                             </div>
 
                             <div class="input-container">
-                                <select name="from" id="form-from" data-custom-select>
+                                <select name="from" id="form-from" data-custom-select-no-search>
+                                    <option value=""></option>
                                     <option value="A friend of mine told me">A friend of mine told me</option>
                                     <option value="Social media">Social media</option>
                                 </select>
@@ -657,7 +658,9 @@
 <link rel="stylesheet" href="/vendor/fancybox/style.css">
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.9/js/select2.min.js"></script>
+<script src="/vendor/select2/script.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
 
 <script src="/build/js/script.js"></script>
 </body>

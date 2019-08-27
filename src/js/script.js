@@ -155,6 +155,15 @@ $(function () {
       $tab.find('[data-gallery-plan]').fadeIn();
     }
   });
-  
-  $('[data-custom-select]').select2();
+
+  $('[data-custom-select]').select2()
+      .on("select2:open", function () {
+        $('.select2-results__options').niceScroll();
+      });
+
+  $('[data-custom-select-no-search]').select2({
+    minimumResultsForSearch: Infinity
+  }).on("select2:open", function () {
+    $('.select2-results__options').niceScroll();
+  });
 });

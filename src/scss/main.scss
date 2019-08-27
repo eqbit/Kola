@@ -27,6 +27,10 @@ body {
   font-weight: 400;
   color: #FFF;
   margin: 0;
+
+  &.document-loaded {
+    overflow: hidden;
+  }
 }
 
 header {
@@ -890,6 +894,23 @@ ul.slick-dots {
     font-size: 20px;
     padding: 30px 20px 0;
   }
+
+  &-form {
+    display: grid;
+    grid-gap: 25px;
+
+    &-double-input {
+      display: flex;
+
+      .input-container {
+        flex: 1;
+      }
+
+      .input-container + .input-container {
+        margin-left: 25px;
+      }
+    }
+  }
 }
 
 .input-container {
@@ -914,9 +935,83 @@ ul.slick-dots {
     font-size: 20px;
     padding: 30px 20px 0;
 
+    .select2-selection__arrow {
+      top: 30px !important;
+      right: 25px !important;
+      transition: .3s;
+      height: auto !important;
+      width: auto !important;
+
+      b {
+        border-color: #FFF !important;
+        border-style: none none solid solid !important;
+        border-width: 2px !important;
+        height: 8px !important;
+        width: 8px !important;
+        left: 0 !important;
+        margin-left: 0 !important;
+        margin-top: 0 !important;
+        position: static !important;
+        display: block !important;
+        transform: rotate(-45deg);
+      }
+    }
+
     .select2-selection__rendered {
       color: #FFF !important;
       font-size: 20px !important;
     }
+  }
+}
+
+.select2-container--open {
+  .select2-selection__arrow {
+    transform: rotate(180deg);
+  }
+}
+
+.select2-dropdown {
+  background: #5E656E !important;
+  transform: translateY(10px);
+  border-radius: 3px !important;
+  border-top: 1px solid #FFF !important;
+}
+
+.select2-results__option {
+  height: 69px;
+  font-size: 20px;
+  padding: 20px !important;
+  border-top: 1px solid #FFF;
+
+  &:first-child {
+    display: none;
+  }
+
+  &[aria-selected=true] {
+    background: transparent !important;
+  }
+
+  &--highlighted {
+    background: #B3CBE6 !important;
+    color: #333 !important;
+
+    &[aria-selected=true] {
+      background: #B3CBE6 !important;
+      color: #333 !important;
+    }
+  }
+}
+
+.select2-search__field {
+  background: transparent;
+  border: none !important;
+  color: #FFF !important;
+  font-size: 20px !important;
+  padding: 20px !important;
+}
+
+.select2-search--hide + .select2-results {
+  .select2-results__option:nth-child(2) {
+    border-top: none !important;
   }
 }
