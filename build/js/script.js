@@ -1,6 +1,8 @@
 "use strict";
 
 $(function () {
+  var _this = this;
+
   $('body').addClass('document-loaded');
   var state = {
     letScroll: true
@@ -8,8 +10,10 @@ $(function () {
   var $pageSlider = $('[data-main-slider]');
   $pageSlider.on('init', function () {
     mouseWheel($pageSlider);
-  }).on('afterChange', function () {
+  }).on('afterChange', function (event, slick, currentSlide) {
+    event.stopPropagation();
     state.letScroll = true;
+    checkHeaderMenu(currentSlide);
   }).slick({
     vertical: true,
     dots: true,
@@ -50,18 +54,18 @@ $(function () {
     state.letScroll = false;
   }
 
-  $('[data-tabs]').each(function () {
-    var $tabsContainer = $(this);
-    $tabsContainer.find('[data-tab-head]').first().addClass('active');
-    $tabsContainer.find('[data-tab-content]').hide().eq(0).show();
-  });
-  $('[data-tab-head]').click(function () {
-    if (!$(this).is('.active')) {
-      var $tabsContainer = $(this).closest('[data-tabs]');
-      $tabsContainer.find('[data-tab-content]').hide().eq($(this).index()).fadeIn();
-      $tabsContainer.find('[data-tab-head]').removeClass('active');
-      $(this).addClass('active');
-    }
+  var $riverGallery = $('[data-river-tab-gallery]'),
+      $riverContent = $('[data-river-tab-content]'),
+      $riverHead = $('[data-river-tab-head]');
+  $riverGallery.hide().eq(0).show();
+  $riverContent.hide().eq(0).show();
+  $riverHead.eq(0).addClass('active');
+  $riverHead.on('click', function () {
+    var $this = $(this);
+    $riverHead.removeClass('active');
+    $this.addClass('active');
+    $riverContent.hide().eq($this.index()).fadeIn();
+    $riverGallery.hide().eq($this.index()).fadeIn().find('[data-gallery-slider]').slick('setPosition');
   });
 
   var isMobile = function isMobile() {
@@ -80,6 +84,7 @@ $(function () {
   $commonSliders.each(function () {
     var $slider = $(this);
     $slider.on('init reInit afterChange', function (event, slick, currentSlide) {
+      event.stopPropagation();
       currentSlide = (currentSlide ? currentSlide : 0) + 1;
       $slider.parent().find('[data-gallery-slider-number]').html("".concat(currentSlide, " <span style=\"opacity: .5\">/ ").concat(slick.slideCount, "</span>"));
       var $slides = slick.$slides,
@@ -92,14 +97,31 @@ $(function () {
       prevArrow: $slider.parent().find('[data-gallery-slider-prev]'),
       nextArrow: $slider.parent().find('[data-gallery-slider-next]'),
       fade: true,
-      speed: 100
+      speed: 300,
+      responsive: [{
+        breakpoint: 1000,
+        settings: {
+          slidesToShow: 3,
+          centerMode: true,
+          fade: false,
+          infinite: true
+        }
+      }]
     });
   });
   $('[data-team-slider]').slick({
     slidesToShow: 4,
     infinite: false,
     prevArrow: $('[data-team-slider-prev]'),
-    nextArrow: $('[data-team-slider-next]')
+    nextArrow: $('[data-team-slider-next]'),
+    responsive: [{
+      breakpoint: 1000,
+      settings: {
+        slidesToShow: 3
+      }
+    }]
+  }).on('afterChange', function (event) {
+    event.stopPropagation();
   });
   var $clubGallery = $('[data-club-tab-gallery]'),
       $clubContent = $('[data-club-tab-content]'),
@@ -134,6 +156,126 @@ $(function () {
       $tab.find('[data-gallery-plan]').fadeIn();
     }
   });
-  $('[data-custom-select]').select2();
+  $('[data-custom-select]').select2().on('select2:open', function () {
+    $('.select2-results__options').niceScroll();
+  });
+  $('[data-custom-select-no-search]').select2({
+    minimumResultsForSearch: Infinity
+  }).on('select2:open', function () {
+    $('.select2-results__options').niceScroll();
+  });
+  var formData = {};
+  var $dataHandle = $('[data-handle]');
+  $dataHandle.on('change', function (e) {
+    formData[e.target.name] = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+
+    if (e.target.type !== 'checkbox') {
+      checkFormdata();
+    }
+  });
+  var $focusHandle = $('[data-focus-handle]');
+  $focusHandle.on('focus', function () {
+    $(this).closest('.input-container').addClass('has-focus');
+  }).on('blur', function () {
+    $(this).closest('.input-container').removeClass('has-focus');
+  });
+
+  var checkFormdata = function checkFormdata() {
+    for (var key in formData) {
+      if (!!formData[key]) {
+        $("[name=".concat(key, "]")).closest('.input-container').addClass('has-value');
+      } else {
+        $("[name=".concat(key, "]")).closest('.input-container').removeClass('has-value');
+      }
+    }
+  };
+
+  function isEmail(email) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return regex.test(email);
+  }
+
+  var $emailInput = $('[data-email-validation]');
+  $emailInput.on('blur', function (e) {
+    if (!isEmail(e.target.value)) {
+      $(this).closest('.input-container').addClass('has-error');
+    } else {
+      $(this).closest('.input-container').removeClass('has-error');
+    }
+  });
+  $emailInput.on('input change', function (e) {
+    if ($(this).closest('.input-container').is('.has-error')) {
+      if (isEmail(e.target.value)) {
+        $(this).closest('.input-container').removeClass('has-error');
+      } else {
+        $(this).closest('.input-container').addClass('has-error');
+      }
+    }
+  });
+  $('[data-form]').on('submit', function (e) {
+    e.preventDefault();
+    var $form = $(_this);
+    $form.find('[data-required]').each(function () {
+      if (!formData[$(this).attr('name')]) {
+        $(this).closest('.input-container').addClass('has-error');
+      }
+    });
+    if ($form.find('.has-error').length) return false;
+    $.ajax({
+      url: 'api.json',
+      type: 'get',
+      dataType: 'json',
+      data: formData,
+      success: function success() {
+        $('[data-form]').hide();
+        $('[data-form-success]').fadeIn().removeClass('contacts-form-success--hidden');
+      }
+    });
+  });
+  $('[data-required]').on('change', function (e) {
+    if (!$(e.target).is('[data-email-validation]')) {
+      if (e.target.value) {
+        $(e.target).closest('.has-error').removeClass('has-error');
+      }
+    }
+  });
+  $('[data-another-form]').on('click', function () {
+    $('[data-form-success]').hide().addClass('contacts-form-success--hidden');
+    $('[data-form]').fadeIn();
+    formData = {};
+    $('[data-form]').find('input').val('');
+    $('[data-form]').find('.has-value').removeClass('has-value');
+    $('[data-form]').find('[type=checkbox]').prop("checked", false);
+    $('[data-custom-select]').val(null).trigger('change');
+    $('[data-custom-select-no-search]').val(null).trigger('change');
+  });
+  var $anchorLink = $('[data-anchor-link]');
+  $anchorLink.on('click', function (e) {
+    e.preventDefault();
+    $pageSlider.slick('slickGoTo', $(this).index() + 1);
+  });
+
+  var checkHeaderMenu = function checkHeaderMenu(currentSlide) {
+    $anchorLink.removeClass('active');
+
+    if (currentSlide - 1 >= 0) {
+      $anchorLink.eq(currentSlide - 1).addClass('active');
+    }
+  };
+
+  $('[data-show-scheme]').on('click', function () {
+    $(this).hide();
+    var $tab = $(this).closest('[data-river-tab-content]');
+    $tab.find('[data-river-text]').hide();
+    $tab.find('[data-river-scheme]').fadeIn();
+    $tab.find('[data-show-text]').fadeIn();
+  });
+  $('[data-show-text]').on('click', function () {
+    $(this).hide();
+    var $tab = $(this).closest('[data-river-tab-content]');
+    $tab.find('[data-river-scheme]').hide();
+    $tab.find('[data-river-text]').fadeIn();
+    $tab.find('[data-show-scheme]').fadeIn();
+  });
 });
 //# sourceMappingURL=script.js.map
